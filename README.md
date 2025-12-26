@@ -1,294 +1,64 @@
-# HTU Environment Rebuild
-## Enterprise Multi-User RHEL Server
+# HTU Environment Rebuild – Assignment Brief
+
+## Introduction
+
+Hello Trainee,
+
+We are contacting you following a critical incident that recently affected one of our major clients, HTU. Due to the sudden departure of several members of the former SysAdmins team, large portions of the infrastructure were left without proper documentation or maintenance. This resulted in a major outage for HTU a few days ago.
+
+HTU has expressed strong dissatisfaction and indicated that any similar incident in the future may lead to the termination of their contract, posing a serious risk to our business relationship and overall reputation.
+
+We urgently require your support to rebuild and stabilize HTU’s environment from the ground up. As they operate an Enterprise Multi-User Environment, the system must be reconstructed with proper security, user access control, storage integrity, and service reliability.
+
+Because no documentation was left behind, you must perform a complete reinstallation and reconfiguration of their RHEL server from scratch.
 
 ---
 
-## 1. Project Overview
+## 1. Server Rebuild Task
 
-| Item | Description |
-|----|----|
-| Client | HTU |
-| Problem | Major outage caused by missing documentation and mismanagement |
-| Objective | Rebuild and stabilize the enterprise server from scratch |
-| Operating System | Red Hat Enterprise Linux (RHEL) |
-| Access Method | SSH only after installation |
+Rebuild HTU’s Enterprise Multi-User Environment server using the following specifications:
 
----
-
-## 2. Server Hardware Specifications
-
-| Resource | Specification |
-|----|----|
-| vCPU | 4 |
-| RAM | 4 GB |
-| Disk 1 | 20 GB (Operating System) |
-| Disk 2 | 40 GB (LVM, Storage, Swap) |
+- 4 vCPU  
+- 4 GB RAM  
+- 20 GB Disk  
+- 40 GB Disk  
+- Operating System: Red Hat Enterprise Linux (RHEL)
 
 ---
 
-## 3. OS Installation Configuration
+## 2. OS Installation Requirements
 
-### 3.1 Localization Settings
+After preparing the server hardware and confirming that it is ready for deployment, install Red Hat Enterprise Linux using standard installation methods.
 
-| Setting | Value |
-|----|----|
-| Language | English (US) |
-| Keyboard | English (US) |
-| Timezone | Asia/Amman |
+In addition to the manual installation, configure an automated installation workflow using Kickstart to support consistent and repeatable deployments across HTU’s environment.
 
-### 3.2 Disk & Partitioning
+### 2.1 Language & Localization
+- Language: English (US)  
+- Keyboard: English (US)  
+- Timezone: Asia/Amman  
 
-| Item | Configuration |
-|----|----|
-| Selected Disk | 20 GB |
-| Partitioning Method | Automatic |
-| Filesystem | Default |
+### 2.2 Disk & Partitioning
+- Select the 20 GB disk  
+- Use Automatic Partitioning  
 
-### 3.3 User Configuration
+### 2.3 User Configuration
+- Disable direct root login  
+- Create an administrative user:
+  - Username: sysadmin  
+  - Add to the wheel group  
+  - Use a strong password  
 
-| User | Role | Group | Root Login |
-|----|----|----|----|
-| root | Disabled | — | ❌ |
-| sysadmin | Administrator | wheel | ✔ (sudo) |
+### 2.4 Software Selection
+- Minimal Install  
+- Leave all other settings as default  
 
----
-
-## 4. Software Selection
-
-| Option | Selection |
-|----|----|
-| Installation Type | Minimal Install |
-| Additional Packages | Default only |
+### 2.5 Automated Installation (Kickstart)
+Prepare a Kickstart configuration that reflects all installation settings above.
 
 ---
 
-## 5. Automated Installation (Kickstart)
-
-| Requirement | Status |
-|----|----|
-| Fully automated | ✔ |
-| Matches manual installation | ✔ |
-| Repeatable deployment | ✔ |
-
----
-
-## 6. Remote Access Policy
-
-| Item | Requirement |
-|----|----|
-| Access Method | SSH |
-| Local Console Usage | Not allowed |
-| Administrative Access | sysadmin only |
-
----
-
-## 7. Post-Installation System Setup
-
-### 7.1 Server Registration
-
-| Task | Description |
-|----|----|
-| Registration | Red Hat Subscription Management |
-| Repositories | Official RHEL repositories |
-
-### 7.2 System Update
-
-| Command | Purpose |
-|----|----|
-| dnf update -y | Update all packages |
-
-### 7.3 Essential Packages
-
-| Package | Purpose |
-|----|----|
-| nano | Text editor |
-| VDO + kmod-kvdo | Storage optimization |
-| rsync | Secure data migration |
-| tuned | Performance tuning |
-| httpd / nginx | Web server |
-| net-tools | Legacy networking (optional) |
-
----
-
-## 8. Storage Configuration (Disk 2 – 40 GB)
-
-### 8.1 Disk Layout
-
-| Item | Configuration |
-|----|----|
-| Partition Table | GPT |
-| Partition Type | Single LVM |
-| Filesystem | XFS |
-
-### 8.2 Logical Volumes
-
-| Mount Point | Size | Notes |
-|----|----|----|
-| /home | 15 GB | Migrated using rsync |
-| /home.bak | — | Original home directory |
-| /company | 10 GB | Department data |
-| Swap (extra) | RAM-based | Added without removing default |
-
-### 8.3 Persistence
-
-| File | Purpose |
-|----|----|
-| /etc/fstab | Persistent mounts and swap |
-
----
-
-## 9. Department Directory Structure
-
-### 9.1 Directories
-
-| Department | Path |
-|----|----|
-| HR | /company/hr |
-| Finance | /company/finance |
-| Engineering | /company/engineering |
-| Management | /company/management |
-
-### 9.2 Access Control Policy
-
-| Rule | Applied |
-|----|----|
-| Department isolation | ✔ |
-| Group collaboration | ✔ |
-| Inherit group ownership | ✔ |
-| Prevent deleting others’ files | ✔ |
-
----
-
-## 10. Groups and Users
-
-### 10.1 Groups
-
-| Groups |
-|----|
-| hr |
-| finance |
-| engineering |
-| management |
-| it |
-
-### 10.2 User Accounts
-
-| Username | Department | Group | Admin | Password |
-|----|----|----|----|----|
-| sara | HR | hr | No | Htu@123 |
-| huda | HR | hr | No | Htu@123 |
-| ahmed | Finance | finance | No | Htu@123 |
-| rami | Finance | finance | No | Htu@123 |
-| omar | Engineering | engineering | No | Htu@123 |
-| ali | Engineering | engineering | No | Htu@123 |
-| manager | Management | management | No | Htu@123 |
-| admin1 | IT | it | Yes | Htu@123 |
-| admin2 | IT | it | Yes | Htu@123 |
-
-### 10.3 Home Directory Rules
-
-| Rule | Status |
-|----|----|
-| Home on Disk 2 | ✔ |
-| Single department group | ✔ |
-| Admin privileges for IT only | ✔ |
-
----
-
-## 11. Backup Configuration
-
-### 11.1 Backup Script
-
-| Feature | Description |
-|----|----|
-| Source | /company |
-| Format | Compressed .tar |
-| Destination | /backup |
-
-### 11.2 Automation
-
-| Tool | Schedule |
-|----|----|
-| cron | Daily at 11:59 AM |
-
----
-
-## 12. Performance Optimization (TuneD)
-
-| Task | Status |
-|----|----|
-| TuneD installed | ✔ |
-| Enabled at boot | ✔ |
-| Active profile | virtual-guest |
-
----
-
-## 13. System Identity & Repositories
-
-### 13.1 Hostname
-
-| Setting | Value |
-|----|----|
-| Hostname | htu-server.ceu.local |
-
-### 13.2 Local Name Resolution
-
-| File | Purpose |
-|----|----|
-| /etc/hosts | Local hostname resolution |
-
-### 13.3 YUM Repositories
-
-| Repository | URL |
-|----|----|
-| BaseOS | http://content.example.com/rhel8.0/x86_64/dvd/BaseOS |
-| AppStream | http://content.example.com/rhel8.0/x86_64/dvd/AppStream |
-
----
-
-## 14. HR Placeholder Web Application
-
-### 14.1 Web Content
-
-| Item | Value |
-|----|----|
-| Path | /opt/hr_placeholder |
-| Page | Coming Soon |
-
-### 14.2 Web Service Configuration
-
-| Setting | Value |
-|----|----|
-| Web Server | Apache or Nginx |
-| Port | 82 |
-| Service Manager | systemd |
-| Auto-start | Enabled |
-
-### 14.3 SELinux & Firewall
-
-| Feature | Status |
-|----|----|
-| SELinux Mode | Enforcing |
-| Port 82 Allowed | ✔ |
-| Firewall Rule | Permanent |
-
----
-
-## 15. SSH Service Hardening
-
-### 15.1 Authentication
-
-| Rule | Applied |
-|----|----|
-| SSH keys for sysadmin | ✔ |
-| Password login (sysadmin) | ❌ |
-| Password authentication (system-wide) | ❌ |
-
-### 15.2 Access Restrictions
-
-| Rule | Applied |
-|----|----|
-| SSH access for admins only | ✔ |
-| Non-admin SSH access | ❌ |
-
----
+## 12. SSH Service Hardening
+
+- SSH key authentication for sysadmin
+- Disable password authentication
+- Restrict SSH access to administrative users only
